@@ -10,11 +10,7 @@ MIDDLEWARE = [
 ]
 
 TEST_RUNNER = 'testrunner.NoDbTestRunner'
-ROOT_URLCONF = 'tester.urls'
+ROOT_URLCONF = 'threadlocals.tester.urls'
 INSTALLED_APPS = [
-    'tester',
+    'threadlocals.tester',
 ]
-
-
-
-
