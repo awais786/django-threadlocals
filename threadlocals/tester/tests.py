@@ -4,13 +4,13 @@ unittest). These will both pass when you run "manage.py test".
 
 Replace these with more appropriate tests for your application.
 """
+import sys
+
 from django.test import RequestFactory, SimpleTestCase
 from django.urls import reverse
 
-from threadlocals.threadlocals import (
-    set_thread_variable, get_thread_variable, get_current_request,
-    # get_current_session
-)
+from threadlocals.threadlocals import (  # get_current_session
+    get_current_request, get_thread_variable, set_thread_variable)
 
 
 class ThreadlocalsTest(SimpleTestCase):
@@ -55,7 +55,10 @@ class ThreadLocalMiddlewareTest(SimpleTestCase):
         should trigger the middleware and set the request in thread locals
         """
         response = self.client.get(''.join([reverse('query'), '?query=test']))
-        self.assertEqual(response.content.decode('utf8'), u"{'query': 'test'}")
+        if sys.version_info[0] < 3:
+            self.assertEqual(response.content.decode('utf8'), u"{u'query': u'test'}")
+        else:
+            self.assertEqual(response.content.decode('utf8'), "{'query': 'test'}")
         # No formal way to order tests, so verify request is deleted here.
         self.assertEqual(get_current_request(), None)
 
